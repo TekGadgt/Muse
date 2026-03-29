@@ -1,0 +1,105 @@
+/* Zen container — full screen takeover */
+.claude-focus-zen-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: var(--background-primary);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+}
+
+/* Centered content wrapper */
+.claude-focus-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 42rem;
+  padding: var(--size-4-8) var(--size-4-4);
+  box-sizing: border-box;
+}
+
+/* Done button — subtle, top-right */
+.claude-focus-done-btn {
+  position: fixed;
+  top: var(--size-4-4);
+  right: var(--size-4-4);
+  background: transparent;
+  color: var(--text-faint);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  padding: var(--size-4-1) var(--size-4-3);
+  font-size: var(--font-ui-small);
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.claude-focus-done-btn:hover {
+  color: var(--text-muted);
+  border-color: var(--background-modifier-border-hover);
+}
+
+.claude-focus-done-btn:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+}
+
+/* Prompt blockquote */
+.claude-focus-prompt {
+  margin-bottom: var(--size-4-8);
+}
+
+.claude-focus-prompt blockquote {
+  border-left: 3px solid var(--text-faint);
+  padding-left: var(--size-4-4);
+  color: var(--text-muted);
+  font-size: var(--font-ui-medium);
+  line-height: 1.7;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Writing area */
+.claude-focus-editor {
+  width: 100%;
+}
+
+.claude-focus-textarea {
+  width: 100%;
+  min-height: 60vh;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-normal);
+  font-family: var(--font-text-theme);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  resize: none;
+  padding: 0;
+}
+
+.claude-focus-textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.claude-focus-textarea:focus-visible {
+  outline: none;
+}
+
+/* Loading state */
+.claude-focus-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  color: var(--text-muted);
+  font-size: var(--font-ui-medium);
+}
