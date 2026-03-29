@@ -66,8 +66,9 @@ export default class ClaudeFocusPlugin extends Plugin {
         this.settings.outputFolder,
         prompt
       );
+      const fileContent = await this.app.vault.read(file);
       view.setFile(file);
-      view.renderWritingSurface(prompt);
+      view.renderWritingSurface(prompt, fileContent);
     } catch (error) {
       leaf.detach();
       if (error instanceof Error) {

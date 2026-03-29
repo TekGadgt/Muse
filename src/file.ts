@@ -36,6 +36,7 @@ export async function createZenNote(
   await ensureFolder(vault, outputFolder);
   const date = todayString();
   const filePath = findAvailablePath(vault, outputFolder, date);
-  const content = `> ${prompt}\n\n`;
+  const blockquoted = prompt.split("\n").map(line => `> ${line}`).join("\n");
+  const content = `${blockquoted}\n\n`;
   return await vault.create(filePath, content);
 }

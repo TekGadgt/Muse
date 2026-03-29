@@ -6,6 +6,8 @@ export class ZenWriterView extends ItemView {
   private file: TFile | null = null;
   private textareaEl: HTMLTextAreaElement | null = null;
   private saveInterval: number | null = null;
+  private promptHeader: string = "";
+  private lastSavedValue: string = "";
 
   constructor(leaf: WorkspaceLeaf) {
     super(leaf);
@@ -31,7 +33,9 @@ export class ZenWriterView extends ItemView {
     loadingEl.setAttribute("aria-live", "polite");
   }
 
-  renderWritingSurface(prompt: string): void {
+  renderWritingSurface(prompt: string, promptHeader: string): void {
+    this.promptHeader = promptHeader;
+
     const container = this.containerEl;
     container.empty();
     container.addClass("claude-focus-zen-container");
@@ -72,6 +76,7 @@ export class ZenWriterView extends ItemView {
     this.registerDomEvent(container, "keydown", (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
+        e.stopPropagation();
         this.exitZenMode();
       }
     });
@@ -84,16 +89,12 @@ export class ZenWriterView extends ItemView {
   private async saveContent(): Promise<void> {
     if (!this.file || !this.textareaEl) return;
 
-    const existingContent = await this.app.vault.read(this.file);
-    // The file starts with "> prompt\n\n", we append user text after that
-    const promptEnd = existingContent.indexOf("\n\n");
-    const promptSection =
-      promptEnd >= 0
-        ? existingContent.substring(0, promptEnd + 2)
-        : existingContent;
-    const newContent = promptSection + this.textareaEl.value;
+    const currentValue = this.textareaEl.value;
+    if (currentValue === this.lastSavedValue) return;
 
+    const newContent = this.promptHeader + currentValue;
     await this.app.vault.modify(this.file, newContent);
+    this.lastSavedValue = currentValue;
   }
 
   private async exitZenMode(): Promise<void> {
