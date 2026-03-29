@@ -2,12 +2,64 @@ import { requestUrl } from "obsidian";
 import type { ClaudeFocusSettings } from "./settings";
 
 const CLAUDE_API_URL = "https://api.anthropic.com/v1/messages";
-const MODEL = "claude-haiku-4-5-20251001";
-const MAX_TOKENS = 200;
+const MODEL = "claude-sonnet-4-5-20241022";
+const MAX_TOKENS = 300;
 
-export function buildSystemPrompt(settings: ClaudeFocusSettings): string {
+interface GitHubRepo {
+  name: string;
+  description: string | null;
+  language: string | null;
+  stargazers_count: number;
+  fork: boolean;
+  topics?: string[];
+}
+
+function extractGitHubUsername(url: string): string | null {
+  const match = url.match(/github\.com\/([^/]+)/);
+  return match ? match[1] : null;
+}
+
+async function fetchGitHubRepos(
+  githubUrl: string
+): Promise<string> {
+  const username = extractGitHubUsername(githubUrl);
+  if (!username) return "";
+
+  try {
+    const response = await requestUrl({
+      url: `https://api.github.com/users/${username}/repos?sort=updated&per_page=20`,
+      method: "GET",
+      headers: { Accept: "application/vnd.github.v3+json" },
+    });
+
+    if (response.status !== 200) return "";
+
+    const repos = response.json as GitHubRepo[];
+    const owned = repos.filter((r) => !r.fork);
+    if (owned.length === 0) return "";
+
+    const repoList = owned
+      .map((r) => {
+        const parts = [r.name];
+        if (r.description) parts.push(`— ${r.description}`);
+        if (r.language) parts.push(`(${r.language})`);
+        return parts.join(" ");
+      })
+      .join("\n");
+
+    return `\nRecent GitHub repositories:\n${repoList}`;
+  } catch {
+    return "";
+  }
+}
+
+export async function buildSystemPrompt(
+  settings: ClaudeFocusSettings
+): Promise<string> {
   const lines: string[] = [
-    "You are a writing prompt generator. The writer's details:",
+    "You generate blog post topic ideas for a writer. Your job is to suggest a specific, concrete topic they could write a blog post about — not an introspective question or interview prompt.",
+    "",
+    "The writer's details:",
   ];
 
   if (settings.name) lines.push(`Name: ${settings.name}`);
@@ -18,9 +70,14 @@ export function buildSystemPrompt(settings: ClaudeFocusSettings): string {
   if (settings.additionalContext)
     lines.push(`Additional context: ${settings.additionalContext}`);
 
+  if (settings.githubUrl) {
+    const repoContext = await fetchGitHubRepos(settings.githubUrl);
+    if (repoContext) lines.push(repoContext);
+  }
+
   lines.push("");
   lines.push(
-    "Generate a single, specific writing prompt that inspires them to write about their work, interests, or experiences. Keep it to 2-3 sentences. Be direct — no preamble."
+    "Based on their ACTUAL projects, tools, and interests listed above, suggest a specific blog post topic. Reference real project names and technologies from their GitHub repos when possible. Think \"how I built X\", \"why Y works better than Z\", \"a beginner's guide to W\", \"what I learned from doing Q\". Give the topic in 1-2 sentences. Be direct, no preamble, no questions directed at the writer. Do not invent or assume projects they haven't built."
   );
 
   return lines.join("\n");
@@ -40,7 +97,7 @@ export async function fetchWritingPrompt(
     body: JSON.stringify({
       model: MODEL,
       max_tokens: MAX_TOKENS,
-      system: buildSystemPrompt(settings),
+      system: await buildSystemPrompt(settings),
       messages: [{ role: "user", content: "Give me a writing prompt." }],
     }),
   });

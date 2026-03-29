@@ -1,3 +1,23 @@
+/* Hide all Obsidian chrome when zen mode is active */
+body.claude-focus-zen-active .workspace-ribbon,
+body.claude-focus-zen-active .sidebar-toggle-button,
+body.claude-focus-zen-active .workspace-split.mod-left-split,
+body.claude-focus-zen-active .workspace-split.mod-right-split,
+body.claude-focus-zen-active .workspace-tab-header-container,
+body.claude-focus-zen-active .status-bar,
+body.claude-focus-zen-active .titlebar,
+body.claude-focus-zen-active .view-header {
+  display: none !important;
+}
+
+body.claude-focus-zen-active .workspace-leaf {
+  padding: 0 !important;
+}
+
+body.claude-focus-zen-active .workspace-leaf-content {
+  padding: 0 !important;
+}
+
 /* Zen container — full screen takeover */
 .claude-focus-zen-container {
   position: fixed;

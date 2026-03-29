@@ -1,6 +1,7 @@
 import { ItemView, WorkspaceLeaf, TFile } from "obsidian";
 
 export const ZEN_VIEW_TYPE = "claude-focus-zen";
+const ZEN_ACTIVE_CLASS = "claude-focus-zen-active";
 
 export class ZenWriterView extends ItemView {
   private file: TFile | null = null;
@@ -23,6 +24,8 @@ export class ZenWriterView extends ItemView {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   async onOpen(): Promise<void> {
+    document.body.addClass(ZEN_ACTIVE_CLASS);
+
     const container = this.containerEl;
     container.empty();
     container.addClass("claude-focus-zen-container");
@@ -104,7 +107,7 @@ export class ZenWriterView extends ItemView {
       window.clearInterval(this.saveInterval);
       this.saveInterval = null;
     }
-    // Close this leaf to return to normal workspace
+    document.body.removeClass(ZEN_ACTIVE_CLASS);
     this.leaf.detach();
   }
 
@@ -114,5 +117,6 @@ export class ZenWriterView extends ItemView {
       window.clearInterval(this.saveInterval);
       this.saveInterval = null;
     }
+    document.body.removeClass(ZEN_ACTIVE_CLASS);
   }
 }
