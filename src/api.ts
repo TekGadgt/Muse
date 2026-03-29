@@ -2,7 +2,7 @@ import { requestUrl } from "obsidian";
 import type { ClaudeFocusSettings } from "./settings";
 
 const CLAUDE_API_URL = "https://api.anthropic.com/v1/messages";
-const MODEL = "claude-3-5-sonnet-20241022";
+const MODEL = "claude-sonnet-4-6";
 const MAX_TOKENS = 300;
 
 interface GitHubRepo {
