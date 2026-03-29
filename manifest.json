@@ -1,0 +1,9 @@
+{
+  "id": "claude-focus",
+  "name": "Claude Focus",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Distraction-free writing with AI-generated prompts powered by Claude.",
+  "author": "tekgadgt",
+  "isDesktopOnly": false
+}
