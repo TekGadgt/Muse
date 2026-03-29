@@ -38,12 +38,12 @@ export class ClaudeFocusSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("API").setHeading();
 
     new Setting(containerEl)
-      .setName("Claude API key")
-      .setDesc("Your Anthropic API key. Stored locally in plugin data.")
+      .setName("API key")
+      .setDesc("Your Anthropic API key, stored locally in plugin data.") // eslint-disable-line obsidianmd/ui/sentence-case -- proper nouns
       .addText((text) => {
         text.inputEl.type = "password";
         text
-          .setPlaceholder("sk-ant-...")
+          .setPlaceholder("sk-ant-...") // eslint-disable-line obsidianmd/ui/sentence-case -- API key format
           .setValue(this.plugin.settings.apiKey)
           .onChange(async (value) => {
             this.plugin.settings.apiKey = value;
@@ -108,7 +108,7 @@ export class ClaudeFocusSettingTab extends PluginSettingTab {
       .setDesc("Comma-separated list of topics you write about.")
       .addText((text) =>
         text
-          .setPlaceholder("rust, web dev, gardening")
+          .setPlaceholder("rust, web dev, gardening") // eslint-disable-line obsidianmd/ui/sentence-case -- example values
           .setValue(this.plugin.settings.topics)
           .onChange(async (value) => {
             this.plugin.settings.topics = value;
@@ -138,7 +138,7 @@ export class ClaudeFocusSettingTab extends PluginSettingTab {
       .setDesc("Folder where new writing notes are created.")
       .addText((text) =>
         text
-          .setPlaceholder("Claude Focus")
+          .setPlaceholder("Claude Focus") // eslint-disable-line obsidianmd/ui/sentence-case -- folder name
           .setValue(this.plugin.settings.outputFolder)
           .onChange(async (value) => {
             this.plugin.settings.outputFolder = value;

@@ -46,16 +46,16 @@ export async function fetchWritingPrompt(
   });
 
   if (response.status !== 200) {
-    const errorBody = response.json;
+    const errorBody = response.json as { error?: { message?: string } };
     const message =
       errorBody?.error?.message ?? `API returned status ${response.status}`;
     throw new Error(message);
   }
 
-  const body = response.json;
-  const textBlock = body.content?.find(
-    (block: { type: string }) => block.type === "text"
-  );
+  const body = response.json as {
+    content?: Array<{ type: string; text?: string }>;
+  };
+  const textBlock = body.content?.find((block) => block.type === "text");
   if (!textBlock?.text) {
     throw new Error("No text in Claude response.");
   }

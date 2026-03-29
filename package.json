@@ -11,9 +11,10 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "esbuild": "^0.21.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-obsidianmd": "^0.1.9",
     "obsidian": "latest",
     "typescript": "^5.4.0",
-    "eslint": "^9.0.0",
-    "eslint-plugin-obsidianmd": "^0.1.9"
+    "typescript-eslint": "^8.57.2"
   }
 }

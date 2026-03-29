@@ -24,8 +24,8 @@ export default class ClaudeFocusPlugin extends Plugin {
       callback: () => this.activateZenMode(),
     });
 
-    this.addRibbonIcon("pencil", "Claude Focus: Enter zen mode", () => {
-      this.activateZenMode();
+    this.addRibbonIcon("pencil", "Enter zen mode", () => {
+      void this.activateZenMode();
     });
 
     this.addSettingTab(new ClaudeFocusSettingTab(this.app, this));
@@ -35,7 +35,7 @@ export default class ClaudeFocusPlugin extends Plugin {
     this.settings = Object.assign(
       {},
       DEFAULT_SETTINGS,
-      await this.loadData()
+      (await this.loadData()) as Partial<ClaudeFocusSettings> | null
     );
   }
 
@@ -45,7 +45,8 @@ export default class ClaudeFocusPlugin extends Plugin {
 
   private async activateZenMode(): Promise<void> {
     if (!this.settings.apiKey) {
-      new Notice("Claude Focus: Please set your API key in settings.");
+      // eslint-disable-next-line obsidianmd/ui/sentence-case -- "Claude" and "API" are proper nouns
+      new Notice("Please set your Claude API key in settings.");
       return;
     }
 
@@ -55,7 +56,7 @@ export default class ClaudeFocusPlugin extends Plugin {
 
     const view = leaf.view;
     if (!(view instanceof ZenWriterView)) {
-      new Notice("Claude Focus: Failed to open zen view.");
+      new Notice("Failed to open zen view.");
       return;
     }
 
@@ -73,18 +74,14 @@ export default class ClaudeFocusPlugin extends Plugin {
       leaf.detach();
       if (error instanceof Error) {
         if (error.message.includes("401") || error.message.includes("key")) {
-          new Notice(
-            "Claude Focus: Invalid API key. Check your settings."
-          );
+          new Notice("Invalid API key. Check your settings.");
         } else if (error.message.includes("429")) {
-          new Notice(
-            "Claude Focus: Rate limited. Please try again in a moment."
-          );
+          new Notice("Rate limited. Please try again in a moment.");
         } else {
-          new Notice(`Claude Focus: ${error.message}`);
+          new Notice(error.message);
         }
       } else {
-        new Notice("Claude Focus: An unexpected error occurred.");
+        new Notice("An unexpected error occurred.");
       }
     }
   }

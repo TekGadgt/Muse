@@ -18,9 +18,10 @@ export class ZenWriterView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Claude Focus";
+    return "Claude focus";
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async onOpen(): Promise<void> {
     const container = this.containerEl;
     container.empty();
@@ -51,7 +52,7 @@ export class ZenWriterView extends ItemView {
       },
     });
     doneBtn.setText("Done");
-    doneBtn.addEventListener("click", () => this.exitZenMode());
+    doneBtn.addEventListener("click", () => { void this.exitZenMode(); });
 
     // Prompt display
     const promptEl = wrapper.createDiv({ cls: "claude-focus-prompt" });
@@ -70,14 +71,14 @@ export class ZenWriterView extends ItemView {
     this.textareaEl.focus();
 
     // Auto-save every 2 seconds while typing
-    this.saveInterval = window.setInterval(() => this.saveContent(), 2000);
+    this.saveInterval = window.setInterval(() => { void this.saveContent(); }, 2000);
 
     // Listen for Escape
     this.registerDomEvent(container, "keydown", (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
         e.stopPropagation();
-        this.exitZenMode();
+        void this.exitZenMode();
       }
     });
   }
