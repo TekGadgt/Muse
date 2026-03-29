@@ -73,7 +73,9 @@ body.claude-focus-zen-active .workspace-leaf-content {
 
 /* Prompt blockquote */
 .claude-focus-prompt {
-  margin-bottom: var(--size-4-8);
+  max-width: 42rem;
+  margin: 0 auto var(--size-4-8) auto;
+  padding-top: var(--size-4-8);
 }
 
 .claude-focus-prompt blockquote {
