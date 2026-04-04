@@ -1,7 +1,7 @@
 import { Notice, Plugin, TFile, TFolder, normalizePath } from "obsidian";
 import {
-  ClaudeFocusSettings,
-  ClaudeFocusSettingTab,
+  MuseSettings,
+  MuseSettingTab,
   DEFAULT_SETTINGS,
 } from "./settings";
 import { fetchWritingPrompt } from "./api";
@@ -9,7 +9,7 @@ import { createZenNote } from "./file";
 import { ZenWriterView, ZEN_VIEW_TYPE } from "./view";
 
 export default class MusePlugin extends Plugin {
-  settings: ClaudeFocusSettings = DEFAULT_SETTINGS;
+  settings: MuseSettings = DEFAULT_SETTINGS;
 
   async onload(): Promise<void> {
     await this.loadSettings();
@@ -28,14 +28,14 @@ export default class MusePlugin extends Plugin {
       void this.activateMuseMode();
     });
 
-    this.addSettingTab(new ClaudeFocusSettingTab(this.app, this));
+    this.addSettingTab(new MuseSettingTab(this.app, this));
   }
 
   async loadSettings(): Promise<void> {
     this.settings = Object.assign(
       {},
       DEFAULT_SETTINGS,
-      (await this.loadData()) as Partial<ClaudeFocusSettings> | null
+      (await this.loadData()) as Partial<MuseSettings> | null
     );
   }
 
@@ -71,7 +71,6 @@ export default class MusePlugin extends Plugin {
 
   private async activateMuseMode(): Promise<void> {
     if (!this.settings.apiKey) {
-      // eslint-disable-next-line obsidianmd/ui/sentence-case -- "Claude" and "API" are proper nouns
       new Notice("Please set your API key in settings.");
       return;
     }

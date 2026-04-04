@@ -1,8 +1,12 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
-import type ClaudeFocusPlugin from "./main";
+import type MusePlugin from "./main";
 
-export interface ClaudeFocusSettings {
+export type Provider = "anthropic" | "openai";
+
+export interface MuseSettings {
+  provider: Provider;
   apiKey: string;
+  modelOverride: string;
   name: string;
   websiteUrl: string;
   githubUrl: string;
@@ -12,21 +16,23 @@ export interface ClaudeFocusSettings {
   outputFolder: string;
 }
 
-export const DEFAULT_SETTINGS: ClaudeFocusSettings = {
+export const DEFAULT_SETTINGS: MuseSettings = {
+  provider: "anthropic",
   apiKey: "",
+  modelOverride: "",
   name: "",
   websiteUrl: "",
   githubUrl: "",
   bio: "",
   topics: "",
   additionalContext: "",
-  outputFolder: "Claude Focus",
+  outputFolder: "Muse",
 };
 
-export class ClaudeFocusSettingTab extends PluginSettingTab {
-  plugin: ClaudeFocusPlugin;
+export class MuseSettingTab extends PluginSettingTab {
+  plugin: MusePlugin;
 
-  constructor(app: App, plugin: ClaudeFocusPlugin) {
+  constructor(app: App, plugin: MusePlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -38,18 +44,56 @@ export class ClaudeFocusSettingTab extends PluginSettingTab {
     new Setting(containerEl).setName("API").setHeading();
 
     new Setting(containerEl)
+      .setName("Provider")
+      .setDesc("Which AI service to use for generating prompts.")
+      .addDropdown((dropdown) => {
+        dropdown
+          .addOption("anthropic", "Anthropic")
+          .addOption("openai", "OpenAI") // eslint-disable-line obsidianmd/ui/sentence-case -- brand name
+          .setValue(this.plugin.settings.provider)
+          .onChange(async (value) => {
+            this.plugin.settings.provider = value as Provider;
+            await this.plugin.saveSettings();
+            this.display(); // Re-render to update placeholders
+          });
+      });
+
+    const apiKeyPlaceholder =
+      this.plugin.settings.provider === "anthropic"
+        ? "sk-ant-..."
+        : "sk-...";
+
+    new Setting(containerEl)
       .setName("API key")
-      .setDesc("Your Anthropic API key, stored locally in plugin data.") // eslint-disable-line obsidianmd/ui/sentence-case -- proper nouns
+      .setDesc("Your API key, stored locally in plugin data.")
       .addText((text) => {
         text.inputEl.type = "password";
         text
-          .setPlaceholder("sk-ant-...") // eslint-disable-line obsidianmd/ui/sentence-case -- API key format
+          .setPlaceholder(apiKeyPlaceholder)
           .setValue(this.plugin.settings.apiKey)
           .onChange(async (value) => {
             this.plugin.settings.apiKey = value;
             await this.plugin.saveSettings();
           });
       });
+
+    const defaultModel =
+      this.plugin.settings.provider === "anthropic"
+        ? "claude-sonnet-4-6"
+        : "gpt-4o";
+
+    new Setting(containerEl)
+      .setName("Model override")
+      .setDesc("Leave empty to use the default model for your provider.")
+      .addText((text) =>
+        text
+          .setPlaceholder(defaultModel)
+          .setValue(this.plugin.settings.modelOverride)
+          .onChange(async (value) => {
+            this.plugin.settings.modelOverride = value;
+            await this.plugin.saveSettings();
+          })
+      );
 
     new Setting(containerEl).setName("Profile").setHeading();
 
@@ -138,7 +182,7 @@ export class ClaudeFocusSettingTab extends PluginSettingTab {
       .setDesc("Folder where new writing notes are created.")
       .addText((text) =>
         text
-          .setPlaceholder("Claude Focus") // eslint-disable-line obsidianmd/ui/sentence-case -- folder name
+          .setPlaceholder("Muse") // eslint-disable-line obsidianmd/ui/sentence-case -- folder name
           .setValue(this.plugin.settings.outputFolder)
           .onChange(async (value) => {
             this.plugin.settings.outputFolder = value;

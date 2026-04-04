@@ -1,5 +1,5 @@
 import { requestUrl } from "obsidian";
-import type { ClaudeFocusSettings } from "./settings";
+import type { MuseSettings } from "./settings";
 
 const CLAUDE_API_URL = "https://api.anthropic.com/v1/messages";
 const MODEL = "claude-sonnet-4-6";
@@ -54,7 +54,7 @@ async function fetchGitHubRepos(
 }
 
 export async function buildSystemPrompt(
-  settings: ClaudeFocusSettings
+  settings: MuseSettings
 ): Promise<string> {
   const lines: string[] = [
     "You generate blog post topic ideas for a writer. Your job is to suggest a specific, concrete topic they could write a blog post about — not an introspective question or interview prompt.",
@@ -84,7 +84,7 @@ export async function buildSystemPrompt(
 }
 
 export async function fetchWritingPrompt(
-  settings: ClaudeFocusSettings,
+  settings: MuseSettings,
   pastPrompts: string[]
 ): Promise<string> {
   let userMessage = "Give me a writing prompt.";
