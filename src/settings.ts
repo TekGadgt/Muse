@@ -182,7 +182,7 @@ export class MuseSettingTab extends PluginSettingTab {
       .setDesc("Folder where new writing notes are created.")
       .addText((text) =>
         text
-          .setPlaceholder("Muse") // eslint-disable-line obsidianmd/ui/sentence-case -- folder name
+          .setPlaceholder("Muse")
           .setValue(this.plugin.settings.outputFolder)
           .onChange(async (value) => {
             this.plugin.settings.outputFolder = value;

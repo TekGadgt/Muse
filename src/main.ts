@@ -19,8 +19,8 @@ export default class MusePlugin extends Plugin {
     });
 
     this.addCommand({
-      id: "enter-muse-mode",
-      name: "Enter muse mode",
+      id: "enter-writing-mode",
+      name: "Enter writing mode",
       callback: () => this.activateMuseMode(),
     });
 
