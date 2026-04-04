@@ -1,7 +1,7 @@
 import { ItemView, WorkspaceLeaf, TFile } from "obsidian";
 
-export const ZEN_VIEW_TYPE = "claude-focus-zen";
-const ZEN_ACTIVE_CLASS = "claude-focus-zen-active";
+export const ZEN_VIEW_TYPE = "muse-zen";
+const ZEN_ACTIVE_CLASS = "muse-zen-active";
 
 export class ZenWriterView extends ItemView {
   private file: TFile | null = null;
@@ -19,7 +19,7 @@ export class ZenWriterView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Claude focus";
+    return "Muse";
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
@@ -28,10 +28,10 @@ export class ZenWriterView extends ItemView {
 
     const container = this.containerEl;
     container.empty();
-    container.addClass("claude-focus-zen-container");
+    container.addClass("muse-zen-container");
 
     // Loading state
-    const loadingEl = container.createDiv({ cls: "claude-focus-loading" });
+    const loadingEl = container.createDiv({ cls: "muse-loading" });
     loadingEl.createEl("span", { text: "Fetching your writing prompt..." });
     loadingEl.setAttribute("role", "status");
     loadingEl.setAttribute("aria-live", "polite");
@@ -42,29 +42,29 @@ export class ZenWriterView extends ItemView {
 
     const container = this.containerEl;
     container.empty();
-    container.addClass("claude-focus-zen-container");
+    container.addClass("muse-zen-container");
 
-    const wrapper = container.createDiv({ cls: "claude-focus-wrapper" });
+    const wrapper = container.createDiv({ cls: "muse-wrapper" });
 
     // Done button (primarily for mobile touch-only, visible on all platforms)
     const doneBtn = wrapper.createEl("button", {
-      cls: "claude-focus-done-btn",
+      cls: "muse-done-btn",
       attr: {
         "aria-label": "Exit zen mode",
         "type": "button",
       },
     });
     doneBtn.setText("Done");
-    doneBtn.addEventListener("click", () => { void this.exitZenMode(); });
+    doneBtn.addEventListener("click", () => { void this.exitMuseMode(); });
 
     // Prompt display
-    const promptEl = wrapper.createDiv({ cls: "claude-focus-prompt" });
+    const promptEl = wrapper.createDiv({ cls: "muse-prompt" });
     promptEl.createEl("blockquote", { text: prompt });
 
     // Writing area
-    const editorEl = wrapper.createDiv({ cls: "claude-focus-editor" });
+    const editorEl = wrapper.createDiv({ cls: "muse-editor" });
     this.textareaEl = editorEl.createEl("textarea", {
-      cls: "claude-focus-textarea",
+      cls: "muse-textarea",
       attr: {
         placeholder: "Start writing...",
         "aria-label": "Writing area",
@@ -81,7 +81,7 @@ export class ZenWriterView extends ItemView {
       if (e.key === "Escape") {
         e.preventDefault();
         e.stopPropagation();
-        void this.exitZenMode();
+        void this.exitMuseMode();
       }
     });
   }
@@ -101,7 +101,7 @@ export class ZenWriterView extends ItemView {
     this.lastSavedValue = currentValue;
   }
 
-  private async exitZenMode(): Promise<void> {
+  private async exitMuseMode(): Promise<void> {
     await this.saveContent();
     if (this.saveInterval !== null) {
       window.clearInterval(this.saveInterval);
