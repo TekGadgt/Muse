@@ -97,7 +97,7 @@ export class ZenWriterView extends ItemView {
     if (currentValue === this.lastSavedValue) return;
 
     const newContent = this.promptHeader + currentValue;
-    await this.app.vault.modify(this.file, newContent);
+    await this.app.vault.process(this.file, () => newContent);
     this.lastSavedValue = currentValue;
   }
 
