@@ -17,7 +17,7 @@ A distraction-free writing plugin for Obsidian that generates personalized blog 
 3. Choose your AI provider (Anthropic or OpenAI)
 4. Enter your API key ([Anthropic](https://console.anthropic.com/settings/keys) or [OpenAI](https://platform.openai.com/api-keys))
 5. Optionally set a model override (defaults to Claude Sonnet for Anthropic, GPT-4o for OpenAI)
-6. Fill in your profile — name, website, GitHub URL, bio, topics of interest, and any additional context
+6. Fill in your profile — name, website, GitHub username, bio, topics of interest, and any additional context
 7. Set an output folder (defaults to `Muse/`)
 
 ## Usage
@@ -53,3 +53,7 @@ The plugin uses a 300 token max per prompt, so each session costs fractions of a
 
 - An API key from [Anthropic](https://console.anthropic.com/settings/keys) or [OpenAI](https://platform.openai.com/api-keys)
 - Obsidian 1.0.0+
+
+## Acknowledgements
+
+Built with the help of [obsidian-plugin-skill](https://github.com/gapmiss/obsidian-plugin-skill).
