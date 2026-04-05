@@ -169,6 +169,7 @@ async function callOpenAI(
 
 export async function fetchWritingPrompt(
   settings: MuseSettings,
+  apiKey: string,
   pastPrompts: string[]
 ): Promise<string> {
   let userMessage = "Give me a writing prompt.";
@@ -182,9 +183,9 @@ export async function fetchWritingPrompt(
 
   switch (settings.provider) {
     case "openai":
-      return callOpenAI(systemPrompt, userMessage, model, settings.apiKey);
+      return callOpenAI(systemPrompt, userMessage, model, apiKey);
     case "anthropic":
     default:
-      return callAnthropic(systemPrompt, userMessage, model, settings.apiKey);
+      return callAnthropic(systemPrompt, userMessage, model, apiKey);
   }
 }

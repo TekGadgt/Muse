@@ -1,8 +1,8 @@
 {
   "id": "muse",
   "name": "Muse",
-  "version": "0.2.1",
-  "minAppVersion": "1.0.0",
+  "version": "0.3.0",
+  "minAppVersion": "1.11.4",
   "description": "Distraction-free writing mode with AI-generated prompts personalized to your projects and interests.",
   "author": "tekgadgt",
   "isDesktopOnly": false
