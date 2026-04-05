@@ -3,7 +3,6 @@ import {
   MuseSettings,
   MuseSettingTab,
   DEFAULT_SETTINGS,
-  SECRET_KEY_ID,
 } from "./settings";
 import { fetchWritingPrompt } from "./api";
 import { createZenNote } from "./file";
@@ -14,7 +13,6 @@ export default class MusePlugin extends Plugin {
 
   async onload(): Promise<void> {
     await this.loadSettings();
-    this.migrateApiKey();
 
     this.registerView(ZEN_VIEW_TYPE, (leaf) => {
       return new ZenWriterView(leaf);
@@ -45,18 +43,9 @@ export default class MusePlugin extends Plugin {
     await this.saveData(this.settings);
   }
 
-  /** Migrate API key from data.json to secret storage (one-time). */
-  private migrateApiKey(): void {
-    const data = this.settings as MuseSettings & { apiKey?: string };
-    if (data.apiKey) {
-      this.app.secretStorage.setSecret(SECRET_KEY_ID, data.apiKey);
-      delete data.apiKey;
-      void this.saveSettings();
-    }
-  }
-
   private getApiKey(): string {
-    return this.app.secretStorage.getSecret(SECRET_KEY_ID) ?? "";
+    if (!this.settings.apiKeySecretId) return "";
+    return this.app.secretStorage.getSecret(this.settings.apiKeySecretId) ?? "";
   }
 
   private async getPastPrompts(): Promise<string[]> {

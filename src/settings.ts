@@ -3,10 +3,9 @@ import type MusePlugin from "./main";
 
 export type Provider = "anthropic" | "openai";
 
-export const SECRET_KEY_ID = "api-key";
-
 export interface MuseSettings {
   provider: Provider;
+  apiKeySecretId: string;
   modelOverride: string;
   name: string;
   websiteUrl: string;
@@ -19,6 +18,7 @@ export interface MuseSettings {
 
 export const DEFAULT_SETTINGS: MuseSettings = {
   provider: "anthropic",
+  apiKeySecretId: "",
   modelOverride: "",
   name: "",
   websiteUrl: "",
@@ -63,10 +63,12 @@ export class MuseSettingTab extends PluginSettingTab {
       .setDesc("Your API key, stored securely in Obsidian's secret storage.")
       .addComponent((el) => {
         const secret = new SecretComponent(this.app, el);
-        const currentKey = this.app.secretStorage.getSecret(SECRET_KEY_ID);
-        if (currentKey) secret.setValue(currentKey);
-        secret.onChange((value) => {
-          this.app.secretStorage.setSecret(SECRET_KEY_ID, value);
+        if (this.plugin.settings.apiKeySecretId) {
+          secret.setValue(this.plugin.settings.apiKeySecretId);
+        }
+        secret.onChange(async (secretId) => {
+          this.plugin.settings.apiKeySecretId = secretId;
+          await this.plugin.saveSettings();
         });
         return secret;
       });
