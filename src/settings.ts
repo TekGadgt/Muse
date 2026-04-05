@@ -49,7 +49,7 @@ export class MuseSettingTab extends PluginSettingTab {
       .addDropdown((dropdown) => {
         dropdown
           .addOption("anthropic", "Anthropic")
-          .addOption("openai", "OpenAI") // eslint-disable-line obsidianmd/ui/sentence-case -- brand name
+          .addOption("openai", "OpenAI")
           .setValue(this.plugin.settings.provider)
           .onChange(async (value) => {
             this.plugin.settings.provider = value as Provider;
@@ -153,7 +153,7 @@ export class MuseSettingTab extends PluginSettingTab {
       .setDesc("Comma-separated list of topics you write about.")
       .addText((text) =>
         text
-          .setPlaceholder("rust, web dev, gardening") // eslint-disable-line obsidianmd/ui/sentence-case -- example values
+          .setPlaceholder("Rust, web dev, gardening")
           .setValue(this.plugin.settings.topics)
           .onChange(async (value) => {
             this.plugin.settings.topics = value;

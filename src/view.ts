@@ -22,6 +22,7 @@ export class ZenWriterView extends ItemView {
     return "Muse";
   }
 
+  // Must be async to match ItemView.onOpen() signature, but implementation is purely synchronous
   // eslint-disable-next-line @typescript-eslint/require-await
   async onOpen(): Promise<void> {
     document.body.addClass(ZEN_ACTIVE_CLASS);
