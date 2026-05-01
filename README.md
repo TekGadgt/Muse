@@ -17,7 +17,7 @@ Until Muse is available in the Obsidian community marketplace, install it manual
 ```sh
 # Latest release
 gh release download \
-  --repo TekGadgt/muse \
+  --repo TekGadgt/Muse \
   --pattern "main.js" \
   --pattern "manifest.json" \
   --pattern "styles.css" \
@@ -25,7 +25,7 @@ gh release download \
 
 # Specific version
 gh release download 0.3.2 \
-  --repo TekGadgt/muse \
+  --repo TekGadgt/Muse \
   --pattern "main.js" \
   --pattern "manifest.json" \
   --pattern "styles.css" \
