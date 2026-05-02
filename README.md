@@ -21,7 +21,7 @@ gh release download \
   --pattern "main.js" \
   --pattern "manifest.json" \
   --pattern "styles.css" \
-  --dir <vault>/.obsidian/plugins/muse/
+  --dir <vault>/.obsidian/plugins/Muse/
 
 # Specific version
 gh release download 0.3.2 \
@@ -29,7 +29,7 @@ gh release download 0.3.2 \
   --pattern "main.js" \
   --pattern "manifest.json" \
   --pattern "styles.css" \
-  --dir <vault>/.obsidian/plugins/muse/
+  --dir <vault>/.obsidian/plugins/Muse/
 ```
 
 Replace `<vault>` with the path to your Obsidian vault. After downloading, enable the plugin in Settings > Community plugins.
