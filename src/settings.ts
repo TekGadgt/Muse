@@ -1,5 +1,6 @@
 import { App, PluginSettingTab, SecretComponent, Setting } from "obsidian";
 import type MusePlugin from "./main";
+import { linkPendingLegacySecret } from "./settings-migration";
 import type { MuseSettings, Provider } from "./settings-migration";
 export { DEFAULT_SETTINGS, migrateSettings, normalizeSettings } from "./settings-migration";
 export type { MuseSettings, Provider } from "./settings-migration";
@@ -20,6 +21,13 @@ export class MuseSettingTab extends PluginSettingTab {
       if (this.plugin.settings[key]) secret.setValue(this.plugin.settings[key]);
       secret.onChange(async (secretId) => { this.plugin.settings[key] = secretId; await this.plugin.saveSettings(); }); return secret;
     });
+    if (this.plugin.settings.pendingLegacySecretId) {
+      new Setting(containerEl).setName("Legacy API key found").setDesc("For your security, muse will not guess which provider owns this key.").addButton((button) => button.setButtonText(`Link to ${PROVIDER_LABELS[this.plugin.settings.provider]}`).onClick(async () => {
+        this.plugin.settings = linkPendingLegacySecret(this.plugin.settings, this.plugin.settings.provider, this.app.secretStorage);
+        await this.plugin.saveSettings();
+        this.display();
+      }));
+    }
     this.addTextSetting(containerEl, "Model override", "Leave empty to use the default model for your provider.", "modelOverride");
     new Setting(containerEl).setName("Profile").setHeading();
     this.addTextSetting(containerEl, "Name", "Your name, so prompts can address you personally.", "name");
@@ -32,6 +40,8 @@ export class MuseSettingTab extends PluginSettingTab {
     this.addTextSetting(containerEl, "Output folder", "Folder where new writing notes are created.", "outputFolder");
   }
   private addTextSetting(containerEl: HTMLElement, name: string, desc: string, key: keyof MuseSettings, area = false): void {
-    new Setting(containerEl).setName(name).setDesc(desc).addText((text) => text.setValue(this.plugin.settings[key]).onChange(async (value) => { this.plugin.settings[key] = value as never; await this.plugin.saveSettings(); }));
+    const setting = new Setting(containerEl).setName(name).setDesc(desc);
+    if (area) setting.addTextArea((text) => text.setValue(this.plugin.settings[key]).onChange(async (value) => { this.plugin.settings[key] = value as never; await this.plugin.saveSettings(); }));
+    else setting.addText((text) => text.setValue(this.plugin.settings[key]).onChange(async (value) => { this.plugin.settings[key] = value as never; await this.plugin.saveSettings(); }));
   }
 }
