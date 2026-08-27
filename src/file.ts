@@ -1,42 +1,6 @@
-import { normalizePath, TFile, TFolder, Vault } from "obsidian";
-
-function todayString(): string {
-  const d = new Date();
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-async function ensureFolder(vault: Vault, folderPath: string): Promise<void> {
-  const normalized = normalizePath(folderPath);
-  const existing = vault.getAbstractFileByPath(normalized);
-  if (existing instanceof TFolder) return;
-  await vault.createFolder(normalized);
-}
-
-function findAvailablePath(vault: Vault, folder: string, date: string): string {
-  const basePath = normalizePath(`${folder}/${date}.md`);
-  const existing = vault.getAbstractFileByPath(basePath);
-  if (!existing) return basePath;
-
-  let counter = 2;
-  while (true) {
-    const candidate = normalizePath(`${folder}/${date}-${counter}.md`);
-    if (!vault.getAbstractFileByPath(candidate)) return candidate;
-    counter++;
-  }
-}
-
-export async function createZenNote(
-  vault: Vault,
-  outputFolder: string,
-  prompt: string
-): Promise<TFile> {
-  await ensureFolder(vault, outputFolder);
-  const date = todayString();
-  const filePath = findAvailablePath(vault, outputFolder, date);
-  const blockquoted = prompt.split("\n").map(line => `> ${line}`).join("\n");
-  const content = `${blockquoted}\n\n`;
-  return await vault.create(filePath, content);
-}
+import { Notice, normalizePath, TFile, TFolder, Vault } from "obsidian";
+function todayString(): string { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+function validFolderPath(value: string): string { const normalized = normalizePath(value.trim()); if (!normalized || normalized === "." || normalized.includes("..")) throw new Error("Choose a valid, non-empty output folder path."); return normalized; }
+async function ensureFolder(vault: Vault, path: string): Promise<TFolder> { const existing = vault.getAbstractFileByPath(path); if (existing instanceof TFolder) return existing; if (existing) throw new Error(`Output path '${path}' is a file, not a folder. Choose a folder path in settings.`); await vault.createFolder(path); const created = vault.getAbstractFileByPath(path); if (!(created instanceof TFolder)) throw new Error(`Could not create output folder '${path}'.`); return created; }
+function findAvailablePath(vault: Vault, folder: string, date: string): string { const base = normalizePath(`${folder}/${date}.md`); if (!vault.getAbstractFileByPath(base)) return base; for (let n = 2; ; n++) { const candidate = normalizePath(`${folder}/${date}-${n}.md`); if (!vault.getAbstractFileByPath(candidate)) return candidate; } }
+export async function createZenNote(vault: Vault, outputFolder: string, prompt: string): Promise<TFile> { let folderPath: string; try { folderPath = validFolderPath(outputFolder); } catch (error) { new Notice(error instanceof Error ? error.message : "Invalid output folder."); throw error; } await ensureFolder(vault, folderPath); const blockquoted = prompt.split("\n").map((line) => `> ${line}`).join("\n"); return vault.create(findAvailablePath(vault, folderPath, todayString()), `${blockquoted}\n\n`); }

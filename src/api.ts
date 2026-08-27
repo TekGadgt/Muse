@@ -179,13 +179,14 @@ export async function fetchWritingPrompt(
   }
 
   const systemPrompt = await buildSystemPrompt(settings);
-  const model = settings.modelOverride || DEFAULT_MODELS[settings.provider];
+  const provider: Provider = settings.provider === "openai" ? "openai" : "anthropic";
+  const modelOverride = typeof settings.modelOverride === "string" ? settings.modelOverride.trim() : "";
+  const model = modelOverride || DEFAULT_MODELS[provider];
 
-  switch (settings.provider) {
+  switch (provider) {
     case "openai":
       return callOpenAI(systemPrompt, userMessage, model, apiKey);
     case "anthropic":
-    default:
       return callAnthropic(systemPrompt, userMessage, model, apiKey);
   }
 }
