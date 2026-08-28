@@ -1,21 +1,22 @@
 /* Hide all Obsidian chrome when muse mode is active */
-body.muse-zen-active .workspace-ribbon,
-body.muse-zen-active .sidebar-toggle-button,
-body.muse-zen-active .workspace-split.mod-left-split,
-body.muse-zen-active .workspace-split.mod-right-split,
-body.muse-zen-active .workspace-tab-header-container,
-body.muse-zen-active .status-bar,
-body.muse-zen-active .titlebar,
-body.muse-zen-active .view-header {
-  display: none !important;
+/* Repeat the state class to outrank core chrome rules without !important. */
+body.muse-zen-active.muse-zen-active .workspace-ribbon,
+body.muse-zen-active.muse-zen-active .sidebar-toggle-button,
+body.muse-zen-active.muse-zen-active .workspace-split.mod-left-split,
+body.muse-zen-active.muse-zen-active .workspace-split.mod-right-split,
+body.muse-zen-active.muse-zen-active .workspace-tab-header-container,
+body.muse-zen-active.muse-zen-active .status-bar,
+body.muse-zen-active.muse-zen-active .titlebar,
+body.muse-zen-active.muse-zen-active .view-header {
+  display: none;
 }
 
-body.muse-zen-active .workspace-leaf {
-  padding: 0 !important;
+body.muse-zen-active.muse-zen-active .workspace-leaf {
+  padding: 0;
 }
 
-body.muse-zen-active .workspace-leaf-content {
-  padding: 0 !important;
+body.muse-zen-active.muse-zen-active .workspace-leaf-content {
+  padding: 0;
 }
 
 /* Muse container — full screen takeover */
