@@ -32,7 +32,7 @@ gh release download \
   --dir <vault>/.obsidian/plugins/Muse/
 
 # Specific version
-gh release download 0.3.2 \
+gh release download 1.0.1 \
   --repo TekGadgt/Muse \
   --pattern "main.js" \
   --pattern "manifest.json" \
