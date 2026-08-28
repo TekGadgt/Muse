@@ -12,10 +12,18 @@ A distraction-free writing plugin for Obsidian that generates personalized blog 
 
 ## Installation
 
-Until Muse is available in the Obsidian community marketplace, install it manually using the [GitHub CLI](https://cli.github.com/):
+### From the Obsidian community marketplace
+
+1. Open **Settings** in Obsidian.
+2. Select **Community plugins**.
+3. Select **Browse** and search for **Muse**.
+4. Select **Install**, then **Enable** the plugin.
+
+### Manual installation (fallback)
+
+If you cannot use the marketplace, install the latest release manually with the [GitHub CLI](https://cli.github.com/):
 
 ```sh
-# Latest release
 gh release download \
   --repo TekGadgt/Muse \
   --pattern "main.js" \
@@ -24,7 +32,7 @@ gh release download \
   --dir <vault>/.obsidian/plugins/Muse/
 
 # Specific version
-gh release download 0.3.2 \
+gh release download 1.0.1 \
   --repo TekGadgt/Muse \
   --pattern "main.js" \
   --pattern "manifest.json" \
@@ -32,7 +40,7 @@ gh release download 0.3.2 \
   --dir <vault>/.obsidian/plugins/Muse/
 ```
 
-Replace `<vault>` with the path to your Obsidian vault. After downloading, enable the plugin in Settings > Community plugins.
+Replace `<vault>` with the path to your Obsidian vault, then enable Muse in **Settings → Community plugins**.
 
 ## Setup
 

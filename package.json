@@ -1,20 +1,22 @@
 {
   "name": "obsidian-muse",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Distraction-free writing with AI-generated prompts.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-    "lint": "npx eslint src/"
+    "lint": "eslint src/",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "esbuild": "^0.21.0",
     "eslint": "^9.0.0",
-    "eslint-plugin-obsidianmd": "^0.1.9",
+    "eslint-plugin-obsidianmd": "0.4.2",
     "obsidian": "latest",
     "typescript": "^5.4.0",
-    "typescript-eslint": "^8.57.2"
+    "typescript-eslint": "^8.57.2",
+    "vitest": "^2.1.9"
   }
 }
